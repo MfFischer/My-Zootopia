@@ -1,13 +1,7 @@
 <html>
-    <head>
-        <style>
-        @gray-darker:               #444444;
-        @gray-dark:                 #696969;
-        @gray:                      #999999;
-        @gray-light:                #cccccc;
-        @gray-lighter:              #ececec;
-        @gray-lightest:             lighten(@gray-lighter,4%);
-
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap');
 
         html {
           background-color: #ffe9e9;
@@ -15,12 +9,16 @@
 
         h1 {
             text-align: center;
-            font-size: 40pt;
+            font-size: 3rem;
             font-weight: normal;
+            color: #444; /* Darker color for better contrast */
+            font-family: 'Lora', serif;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            margin-bottom: 1rem; /* Space below the heading */
         }
 
         body {
-          font-family: 'Roboto','Helvetica Neue', Helvetica, Arial, sans-serif;
+          font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
           font-style: normal;
           font-weight: 400;
           letter-spacing: 0;
@@ -37,180 +35,157 @@
           list-style: none;
           margin: 0;
           padding: 0;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
         }
 
         .cards__item {
-          background-color: white;
+          background-color: #f5f5dc; /* Light Beige */
           border-radius: 0.25rem;
           box-shadow: 0 20px 40px -14px rgba(0,0,0,0.25);
           overflow: hidden;
           padding: 1rem;
-          margin: 50px;
+          margin: 1rem;
+          transition: transform 0.2s;
+          width: 250px; /* Fixed width */
+          height: 350px; /* Fixed height */
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          border-bottom: 10px solid #ccc; /* Bottom border */
+        }
+
+        .cards__item:hover {
+          transform: scale(1.05);
         }
 
         .card__title {
-          color: @gray-dark;
+          color: #333333; /* Darker Grey */
           font-size: 1.25rem;
           font-weight: 300;
           letter-spacing: 2px;
           text-transform: uppercase;
+          margin-bottom: 0.5rem;
+          border-bottom: 1px solid #ccc; /* Border between title and details */
+          padding-bottom: 0.5rem;
         }
 
         .card__text {
-          flex: 1 1 auto;
+          flex: 1;
           font-size: 0.95rem;
-          line-height: 2;
-          margin-bottom: 1.25rem;
+          line-height: 1.5;
+          color: #333333; /* Darker Grey */
+          padding: 0.5rem 0;
         }
-        </style>
-    </head>
-    <body>
-        <h1>My Animal Repository</h1>
-        <ul class="cards">
-            <li class="cards__item">
+
+        .card__details {
+          list-style: none;
+          padding: 0;
+        }
+
+        .card__detail-item {
+          padding: 0.25rem 0;
+        }
+
+        .card__detail-item strong {
+          color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Animal Repository</h1>
+    <ul class="cards">
+        <li class="cards__item">
   <div class='card__title'>American Foxhound</div>
-  <p class='card__text'>
-      <strong>Location:</strong> North-America<br/>
-      <strong>Type:</strong> Hound<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Arctic Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Eurasia<br/>
-      <strong>Type:</strong> Mammal<br/>
-      <strong>Diet:</strong> Carnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Cross Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> North-America<br/>
-      <strong>Type:</strong> mammal<br/>
-      <strong>Diet:</strong> Carnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Darwin’s fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> South-America<br/>
-      <strong>Type:</strong> Mammal<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> North-America</li>
+      <li class='card__detail-item'><strong>Type:</strong> Hound</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Omnivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> 10 to 12 years</li>
+    </ul>
+  </div>
 </li>
 <li class="cards__item">
   <div class='card__title'>English Foxhound</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Europe<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Fennec Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Africa<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Africa<br/>
-      <strong>Type:</strong> Mammal<br/>
-      <strong>Diet:</strong> Carnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Fox Snakes</div>
-  <p class='card__text'>
-      <strong>Location:</strong> North-America<br/>
-      <strong>Diet:</strong> Carnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Fox Squirrel</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Central-America<br/>
-      <strong>Type:</strong> rodent<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> Europe</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Omnivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> 10 to 13 years</li>
+      <li class='card__detail-item'><strong>Weight:</strong> 75 pounds</li>
+    </ul>
+  </div>
 </li>
 <li class="cards__item">
   <div class='card__title'>Fox Terrier</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Europe<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> Europe</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Omnivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> 14 years</li>
+      <li class='card__detail-item'><strong>Weight:</strong> 8kg (18lbs)</li>
+    </ul>
+  </div>
 </li>
 <li class="cards__item">
   <div class='card__title'>Golden-Crowned Flying Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Asia<br/>
-      <strong>Diet:</strong> Herbivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Gray Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Central-America<br/>
-      <strong>Type:</strong> Mammal<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Kit Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Central-America<br/>
-      <strong>Type:</strong> mammal<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Marble Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> North-America<br/>
-      <strong>Type:</strong> Mammal<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> Asia</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Herbivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> unknown</li>
+      <li class='card__detail-item'><strong>Weight:</strong> 3.1 pounds</li>
+    </ul>
+  </div>
 </li>
 <li class="cards__item">
   <div class='card__title'>Red Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Africa<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> Africa</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Omnivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> 2-4 years in the wild, 10-12 in captivity</li>
+      <li class='card__detail-item'><strong>Weight:</strong> 6.5-24 lbs</li>
+      <li class='card__detail-item'><strong>Length:</strong> 36-42 inches</li>
+    </ul>
+  </div>
 </li>
 <li class="cards__item">
   <div class='card__title'>Smooth Fox Terrier</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Europe<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
-</li>
-<li class="cards__item">
-  <div class='card__title'>Tibetan Fox</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Asia<br/>
-      <strong>Type:</strong> Mammal<br/>
-      <strong>Diet:</strong> Carnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> Europe</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Omnivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> 12 – 15 years</li>
+    </ul>
+  </div>
 </li>
 <li class="cards__item">
   <div class='card__title'>Toy Fox Terrier</div>
-  <p class='card__text'>
-      <strong>Location:</strong> North-America<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> North-America</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Omnivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> 11-14 years</li>
+      <li class='card__detail-item'><strong>Weight:</strong> 13 pounds</li>
+    </ul>
+  </div>
 </li>
 <li class="cards__item">
   <div class='card__title'>Wire Fox Terrier</div>
-  <p class='card__text'>
-      <strong>Location:</strong> Europe<br/>
-      <strong>Diet:</strong> Omnivore<br/>
-  </p>
+  <div class='card__text'>
+    <ul class='card__details'>
+      <li class='card__detail-item'><strong>Location:</strong> Europe</li>
+      <li class='card__detail-item'><strong>Diet:</strong> Omnivore</li>
+      <li class='card__detail-item'><strong>Lifespan:</strong> 13 – 14 years</li>
+      <li class='card__detail-item'><strong>Weight:</strong> 19 lbs</li>
+    </ul>
+  </div>
 </li>
 
-        </ul>
-    </body>
+    </ul>
+</body>
 </html>
