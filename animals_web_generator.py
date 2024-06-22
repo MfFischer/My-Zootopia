@@ -20,14 +20,6 @@ def fetch_animal_data(api_key, animal_name):
         return None
 
 
-def get_available_characteristics(animals_data):
-    """Extracts unique characteristics from the data."""
-    characteristics = set()
-    for animal in animals_data:
-        characteristics.update(animal.get('characteristics', {}).keys())
-    return list(characteristics)
-
-
 def generate_animal_info_string(animals_data):
     """Generates a string with the animals' data."""
     output = ''
@@ -52,14 +44,6 @@ def generate_animal_info_string(animals_data):
     return output
 
 
-def filter_animals_by_characteristic(animals_data, characteristic, value):
-    """Filters the animals by the specified characteristic and value."""
-    return [
-        animal for animal in animals_data
-        if animal.get('characteristics', {}).get(characteristic, '').lower() == value.lower()
-    ]
-
-
 def read_template(file_path):
     """Reads the HTML template file."""
     with open(file_path, "r", encoding="utf-8") as file:
@@ -74,41 +58,28 @@ def write_html(output_path, content):
 
 def main():
     # Get animal name from user
-    animal_name = input("Enter the name of the animal you want to search for: ").strip()
+    animal_name = input("Enter a name of an animal: ").strip()
 
     # Fetch animal data from the API
     animals_data = fetch_animal_data(API_KEY, animal_name)
 
     if animals_data:
-        # Get available characteristics and display them to the user
-        available_characteristics = get_available_characteristics(animals_data)
-        print("Available characteristics:", ", ".join(available_characteristics))
-        selected_characteristic = input("Enter a characteristic from the above list: ").strip()
+        # Generate the animal info string
+        animal_info_string = generate_animal_info_string(animals_data)
 
-        # Get unique values for the selected characteristic
-        unique_values = set(animal['characteristics'].get(selected_characteristic, '') for animal in animals_data)
-        print(f"Available values for {selected_characteristic}:", ", ".join(unique_values))
-        selected_value = input(f"Enter a value for {selected_characteristic}: ").strip()
+        # Read the HTML template
+        template_content = read_template(TEMPLATE_FILE_PATH)
 
-        # Filter animals by the selected characteristic and value
-        filtered_animals = filter_animals_by_characteristic(animals_data, selected_characteristic, selected_value)
+        # Replace the placeholder with the generated animal info string
+        new_html_content = template_content.replace(
+            '__REPLACE_ANIMALS_INFO__',
+            animal_info_string
+        )
 
-        if not filtered_animals:
-            print(f"No animals found with {selected_characteristic} = '{selected_value}'")
-        else:
-            # Generate the animal info string
-            animal_info_string = generate_animal_info_string(filtered_animals)
+        # Write the new HTML content to a new file
+        write_html(OUTPUT_FILE_PATH, new_html_content)
 
-            # Read the HTML template
-            template_content = read_template(TEMPLATE_FILE_PATH)
-
-            # Replace the placeholder with the generated animal info string
-            new_html_content = template_content.replace('__REPLACE_ANIMALS_INFO__', animal_info_string)
-
-            # Write the new HTML content to a new file
-            write_html(OUTPUT_FILE_PATH, new_html_content)
-
-            print(f"Generated HTML content written to {OUTPUT_FILE_PATH}")
+        print(f"Website was successfully generated to the file {OUTPUT_FILE_PATH}.")
     else:
         print("Failed to fetch animal data from the API.")
 
