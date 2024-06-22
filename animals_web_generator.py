@@ -20,8 +20,15 @@ def fetch_animal_data(api_key, animal_name):
         return None
 
 
-def generate_animal_info_string(animals_data):
+def generate_animal_info_string(animals_data, animal_name):
     """Generates a string with the animals' data."""
+    if not animals_data:
+        return (
+                f'<h2>The animal "<span style="color:red;">'
+                f'{animal_name}'
+                f'</span>" doesn\'t exist.</h2>'
+                )
+
     output = ''
     for animal in animals_data:
         output += '<li class="cards__item">\n'
@@ -33,7 +40,7 @@ def generate_animal_info_string(animals_data):
 
         for key, value in characteristics.items():
             output += (
-                f"      <li class='card__detail-item'>"
+                f"<li class='card__detail-item'>"
                 f"<strong>{key.capitalize()}:</strong> {value}"
                 "</li>\n"
             )
@@ -63,25 +70,22 @@ def main():
     # Fetch animal data from the API
     animals_data = fetch_animal_data(API_KEY, animal_name)
 
-    if animals_data:
-        # Generate the animal info string
-        animal_info_string = generate_animal_info_string(animals_data)
+    # Generate the animal info string or error message
+    animal_info_string = generate_animal_info_string(animals_data, animal_name)
 
-        # Read the HTML template
-        template_content = read_template(TEMPLATE_FILE_PATH)
+    # Read the HTML template
+    template_content = read_template(TEMPLATE_FILE_PATH)
 
-        # Replace the placeholder with the generated animal info string
-        new_html_content = template_content.replace(
-            '__REPLACE_ANIMALS_INFO__',
-            animal_info_string
-        )
+    # Replace the placeholder with the generated animal info string
+    new_html_content = template_content.replace(
+        '__REPLACE_ANIMALS_INFO__',
+        animal_info_string
+    )
 
-        # Write the new HTML content to a new file
-        write_html(OUTPUT_FILE_PATH, new_html_content)
+    # Write the new HTML content to a new file
+    write_html(OUTPUT_FILE_PATH, new_html_content)
 
-        print(f"Website was successfully generated to the file {OUTPUT_FILE_PATH}.")
-    else:
-        print("Failed to fetch animal data from the API.")
+    print(f"Website was successfully generated to the file {OUTPUT_FILE_PATH}.")
 
 
 if __name__ == "__main__":
