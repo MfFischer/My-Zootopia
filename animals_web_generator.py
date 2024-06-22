@@ -1,18 +1,32 @@
-import json
+import requests
 
-def load_data(file_path):
-    """Loads a JSON file."""
-    with open(file_path, "r") as handle:
-        return json.load(handle)
+API_KEY = 'MadvaeVZ04sYTrhNCutqeQ==TfZbAInNf69NtvQr'
+TEMPLATE_FILE_PATH = 'animals_template.html'
+OUTPUT_FILE_PATH = 'animals.html'
 
-def get_available_skin_types(animals_data):
-    """Extracts unique skin_type values from the data."""
-    skin_types = set()
+
+def fetch_animal_data(api_key, animal_name):
+    """Fetches animal data from the API Ninja Animals API."""
+    url = "https://api.api-ninjas.com/v1/animals"
+    headers = {'X-Api-Key': api_key}
+    params = {'name': animal_name}
+
+    response = requests.get(url, headers=headers, params=params)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: {response.status_code}, {response.text}")
+        return None
+
+
+def get_available_characteristics(animals_data):
+    """Extracts unique characteristics from the data."""
+    characteristics = set()
     for animal in animals_data:
-        skin_type = animal['characteristics'].get('skin_type')
-        if skin_type:
-            skin_types.add(skin_type)
-    return list(skin_types)
+        characteristics.update(animal.get('characteristics', {}).keys())
+    return list(characteristics)
+
 
 def generate_animal_info_string(animals_data):
     """Generates a string with the animals' data."""
@@ -20,68 +34,84 @@ def generate_animal_info_string(animals_data):
     for animal in animals_data:
         output += '<li class="cards__item">\n'
         output += f"  <div class='card__title'>{animal.get('name')}</div>\n"
-        output += f"  <div class='card__text'>\n"
+        output += "  <div class='card__text'>\n"
         output += "    <ul class='card__details'>\n"
-        if 'locations' in animal and len(animal['locations']) > 0:
-            output += f"      <li class='card__detail-item'><strong>Location:</strong> {animal['locations'][0]}</li>\n"
-        if 'type' in animal['characteristics']:
-            output += f"      <li class='card__detail-item'><strong>Type:</strong> {animal['characteristics']['type']}</li>\n"
-        if 'diet' in animal['characteristics']:
-            output += f"      <li class='card__detail-item'><strong>Diet:</strong> {animal['characteristics']['diet']}</li>\n"
-        if 'lifespan' in animal['characteristics']:
-            output += f"      <li class='card__detail-item'><strong>Lifespan:</strong> {animal['characteristics']['lifespan']}</li>\n"
-        if 'weight' in animal['characteristics']:
-            output += f"      <li class='card__detail-item'><strong>Weight:</strong> {animal['characteristics']['weight']}</li>\n"
-        if 'length' in animal['characteristics']:
-            output += f"      <li class='card__detail-item'><strong>Length:</strong> {animal['characteristics']['length']}</li>\n"
+
+        characteristics = animal.get('characteristics', {})
+
+        for key, value in characteristics.items():
+            output += (
+                f"      <li class='card__detail-item'>"
+                f"<strong>{key.capitalize()}:</strong> {value}"
+                "</li>\n"
+            )
+
         output += "    </ul>\n"
-        output += f"  </div>\n"
+        output += "  </div>\n"
         output += '</li>\n'
     return output
 
-def filter_animals_by_skin_type(animals_data, skin_type):
-    """Filters the animals by the specified skin_type."""
-    return [animal for animal in animals_data if animal['characteristics'].get('skin_type') == skin_type]
+
+def filter_animals_by_characteristic(animals_data, characteristic, value):
+    """Filters the animals by the specified characteristic and value."""
+    return [
+        animal for animal in animals_data
+        if animal.get('characteristics', {}).get(characteristic, '').lower() == value.lower()
+    ]
+
 
 def read_template(file_path):
     """Reads the HTML template file."""
-    with open(file_path, "r") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
+
 
 def write_html(output_path, content):
     """Writes the content to an HTML file."""
-    with open(output_path, "w") as file:
+    with open(output_path, "w", encoding="utf-8") as file:
         file.write(content)
 
-# Define the paths to the data and template files
-data_file_path = 'animals_data.json'
-template_file_path = 'animals_template.html'
-output_file_path = 'animals.html'
 
-# Load the data
-animals_data = load_data(data_file_path)
+def main():
+    # Get animal name from user
+    animal_name = input("Enter the name of the animal you want to search for: ").strip()
 
-# Get available skin types and display them to the user
-available_skin_types = get_available_skin_types(animals_data)
-print("Available skin types:", ", ".join(available_skin_types))
-selected_skin_type = input("Enter a skin type from the above list: ").strip()
+    # Fetch animal data from the API
+    animals_data = fetch_animal_data(API_KEY, animal_name)
 
-# Filter animals by the selected skin type
-filtered_animals = filter_animals_by_skin_type(animals_data, selected_skin_type)
+    if animals_data:
+        # Get available characteristics and display them to the user
+        available_characteristics = get_available_characteristics(animals_data)
+        print("Available characteristics:", ", ".join(available_characteristics))
+        selected_characteristic = input("Enter a characteristic from the above list: ").strip()
 
-if not filtered_animals:
-    print(f"No animals found with skin type '{selected_skin_type}'")
-else:
-    # Generate the animal info string
-    animal_info_string = generate_animal_info_string(filtered_animals)
+        # Get unique values for the selected characteristic
+        unique_values = set(animal['characteristics'].get(selected_characteristic, '') for animal in animals_data)
+        print(f"Available values for {selected_characteristic}:", ", ".join(unique_values))
+        selected_value = input(f"Enter a value for {selected_characteristic}: ").strip()
 
-    # Read the HTML template
-    template_content = read_template(template_file_path)
+        # Filter animals by the selected characteristic and value
+        filtered_animals = filter_animals_by_characteristic(animals_data, selected_characteristic, selected_value)
 
-    # Replace the placeholder with the generated animal info string
-    new_html_content = template_content.replace('__REPLACE_ANIMALS_INFO__', animal_info_string)
+        if not filtered_animals:
+            print(f"No animals found with {selected_characteristic} = '{selected_value}'")
+        else:
+            # Generate the animal info string
+            animal_info_string = generate_animal_info_string(filtered_animals)
 
-    # Write the new HTML content to a new file
-    write_html(output_file_path, new_html_content)
+            # Read the HTML template
+            template_content = read_template(TEMPLATE_FILE_PATH)
 
-    print(f"Generated HTML content written to {output_file_path}")
+            # Replace the placeholder with the generated animal info string
+            new_html_content = template_content.replace('__REPLACE_ANIMALS_INFO__', animal_info_string)
+
+            # Write the new HTML content to a new file
+            write_html(OUTPUT_FILE_PATH, new_html_content)
+
+            print(f"Generated HTML content written to {OUTPUT_FILE_PATH}")
+    else:
+        print("Failed to fetch animal data from the API.")
+
+
+if __name__ == "__main__":
+    main()
